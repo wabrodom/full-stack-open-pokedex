@@ -1,9 +1,6 @@
 name: deployment pipeline
 
 on: 
-  push: 
-    branches: 
-      - main
   pull_request:
     branches: [main]
     types: [opened, synchronize]
@@ -58,15 +55,15 @@ jobs:
         if: ${{ github.event_name == 'push' && success() }}
         with:
           severity: info
+          description: runs on https://full-stack-open-pokedex-wabro.fly.dev/
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-          details: visit https://full-stack-open-pokedex-wabro.fly.dev/
           
       - name: Deployment failure notification
         uses: rjstone/discord-webhook-notify@v1.0.4
         if: ${{ github.event_name == 'push' && failure() }}
         with:
           severity: error
-          details: something went wrong in deployment!
+          description: something went wrong in deployment!
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
   tag_release:
